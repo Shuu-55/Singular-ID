@@ -44,6 +44,21 @@ router.post('/register_user', async (req, res) => {                             
     res.status(200).send('Data received and user registered')
 })
 
+router.post('/confirm_login', async(req,res)=>{
+    const userdata=req.body;
 
+    const check_email=await register.findOne({email:userdata.email});
+
+    if(!check_email){
+        return res.status(401).json('Invalid Email or Password');
+    }else{
+        if(check_email.password === userdata.password){
+            res.status(200).json("Logged In");
+        }
+        else{
+            return res.status(401).json('Invalid Email or Password');
+        }
+}
+})
 
 export default router
