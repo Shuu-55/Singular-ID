@@ -2,6 +2,10 @@ import express from 'express'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import register from '../models/schema.js';
+import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv'
+
+dotenv.config();
 
 const app = express()
 const router = express.Router()
@@ -11,6 +15,24 @@ const __dirname = path.dirname(__filename)
 
 
 app.use(express.json())
+
+const verifyToken=(req,res,next)=>{                                              //verify the token
+    const authHeader=req.headers.authorization;
+    if(!authHeader){
+        res.status(401).json({error:'No token Provided'})
+    }
+
+    const token=authHeader.split(' ')[1];
+
+    jwt.verify(token,process.env.JWT_SECRET, (err,decoded)=>{
+        if(err){
+            res.status(403).json({error:'Failed to authenticate token'})
+        }
+
+        req.user = decoded;
+        next();
+    })
+}
 
 router.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../../../frontend/Login.html'))                    //Login
@@ -44,7 +66,7 @@ router.post('/register_user', async (req, res) => {                             
     res.status(200).send('Data received and user registered')
 })
 
-router.post('/confirm_login', async(req,res)=>{
+router.post('/confirm_login', async(req,res)=>{                                            //fetch of singin page
     const userdata=req.body;
 
     const check_email=await register.findOne({email:userdata.email});
@@ -53,6 +75,12 @@ router.post('/confirm_login', async(req,res)=>{
         return res.status(401).json('Invalid Email or Password');
     }else{
         if(check_email.password === userdata.password){
+
+            const token = jwt.sign(
+                { email: verify_email.email, name: verify_email.name },
+                process.env.JWT_SECRET,
+                { expiresIn: '1h' }
+            );
             res.status(200).json("Logged In");
         }
         else{
