@@ -85,7 +85,7 @@ router.post('/confirm_login', async(req,res)=>{                                 
         if(check_email.password === userdata.password){
 
             const token = jwt.sign(
-                { email: verify_email.email, name: verify_email.name },
+                { email: check_email.email, name: check_email.name },
                 process.env.JWT_SECRET,
                 { expiresIn: '1h' }
             );
