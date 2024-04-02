@@ -16,7 +16,7 @@ const __dirname = path.dirname(__filename)
 
 app.use(express.json())
 
-const verifyToken=(req,res,next)=>{                                              //verify the token
+const verifyToken=(req,res,next)=>{                                                    //verify the token
     const authHeader=req.headers.authorization;
     if(!authHeader){
         res.status(401).json({error:'No token Provided'})
@@ -35,11 +35,19 @@ const verifyToken=(req,res,next)=>{                                             
 }
 
 router.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../../frontend/index.html'))                    //Main
+})
+
+router.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '../../../frontend/Login.html'))                    //Login
 })
 
 router.get('/signup', (req, res) => {                                                     //Signup page
     res.sendFile(path.join(__dirname, '../../../frontend/Signup.html'))                  
+})
+
+router.post('/main', verifyToken, async(req,res)=>{                                         //main page
+    res.sendFile(path.join(__dirname, '../../../frontend/user_index.html'))
 })
 
 router.post('/register_user', async (req, res) => {                                   //fetch of signup page
@@ -88,5 +96,6 @@ router.post('/confirm_login', async(req,res)=>{                                 
         }
 }
 })
+
 
 export default router
