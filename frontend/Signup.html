@@ -94,7 +94,6 @@
     }).then(response => {
         if (response.ok) {
             alert("User has been registered.");
-            // You can redirect the user to another page if needed
             window.location.href = "/Login.html";
         }else if(response.status ===400){
             alert("User already Exists");
