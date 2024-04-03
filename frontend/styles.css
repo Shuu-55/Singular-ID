@@ -188,12 +188,13 @@ td, th {
 }
 
 .w-icon-slider-right:before {
-  content: "î˜€";
+  content: "\2B9E";
 }
 
 .w-icon-slider-left:before {
-  content: "î˜";
+  content: "\2B9C";
 }
+
 
 .w-icon-nav-menu:before {
   content: "î˜‚";
