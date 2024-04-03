@@ -60,8 +60,7 @@ router.post('/register_user', async (req, res) => {                             
     if (existing_user) {
         console.log('email already exists')
         res.status(400).send("Email already exists, Signin")
-        
-        
+        return
     }
 
     const newuserdata = new register({
@@ -78,12 +77,12 @@ router.post('/register_user', async (req, res) => {                             
 router.post('/confirm_login', async(req,res)=>{                                            //fetch of singin page
     const userdata=req.body;
 
-    const verify_email=await register.findOne({email:userdata.email});
+    const check_email=await register.findOne({email:userdata.email});
 
-    if(!verify_email){
+    if(!check_email){
         return res.status(401).json('Invalid Email or Password');
     }else{
-        if(verify_email.password === userdata.password){
+        if(check_email.password === userdata.password){
 
             const token = jwt.sign(
                 { email: check_email.email, name: check_email.name },
