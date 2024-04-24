@@ -512,6 +512,69 @@ label {
   display: block;
 }
 
+.hidden {
+  display: none;
+}
+
+#openPopup {
+  /* Style your button as desired (background color, border, etc.) */
+}
+
+#popup {
+  position: fixed; /* Ensures the pop-up stays on top */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);  /* Centers the pop-up */
+  background-color: white; /* Set background color */
+  border: 1px solid #ccc; /* Add a border */
+  padding: 20px; /* Add padding for content */
+  z-index: 10; /* Ensures the pop-up appears above other elements */
+  width: 300px;  /* Increase width to 400px */
+  height: 500px;  /* Increase height to 200px */
+}
+
+#popup button {
+  /* Style the close button */
+}
+
+#uploadPopup {
+  background-color: #f2f2f2;
+  padding: 20px;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  display: none;
+  z-index: 10;
+}
+
+#uploadPopup h2 {
+  margin-bottom: 10px;
+}
+
+#uploadPopup ul {
+  list-style: none;
+  margin-bottom: 10px; /* Add space between list and buttons */
+}
+
+#uploadPopup li {
+  margin-bottom: 5px;
+}
+
+#uploadPopup button {
+  margin-right: 10px; /* Add space between buttons */
+  padding: 5px 10px; /* Adjust button size and padding as needed */
+  background-color: #ddd; /* Set default button color */
+  border: 1px solid #ccc; /* Add a border */
+  cursor: pointer; /* Indicate clickable behavior */
+}
+
+#uploadPopup button:hover {
+  background-color: #ccc; /* Change background on hover */
+}
+
+
+
 .w-input, .w-select {
   color: #333;
   vertical-align: middle;

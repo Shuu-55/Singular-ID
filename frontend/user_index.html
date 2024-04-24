@@ -21,16 +21,29 @@
         <div data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease"
             role="banner" class="navbar-no-shadow-container w-nav">
             <div class="container-regular">
-                <div class="navbar-wrapper"><a href="index.html" class="navbar-brand w-nav-brand"><img
+                <div class="navbar-wrapper"><a href="#" class="navbar-brand w-nav-brand"><img
                             src="https://assets-global.website-files.com/65f95651c85152dc84412b0d/65fa787b2cc12ff784321f34_logo.jpg"
                             loading="lazy" width="120" alt="" /></a>
                     <nav role="navigation" class="nav-menu-wrapper w-nav-menu">
                         <ul role="list" class="nav-menu w-list-unstyled">
-                            <li><a href="#" class="nav-link">Upload New Documents</a></li>
+                            <button id="openPopup">Upload New Documents</button>
+                            <div id="popup" class="hidden">
+                                <h2>Upload New Documents</h2>
+                                <p>Choose which document you want to upload</p>
+                                  <div class="button-container">
+                                    <li><button>AADHAR Card</button></li>
+                                    <li><button>Voter ID Card</button></li>
+                                    <li><button>PAN Card</button></li>
+                                    <li><button>Driving License</button></li>
+                                  </div>
+                                <button id="closePopup">Close</button>
+                              </div>
+                              
                             <li>
                                 <div data-hover="false" data-delay="0" class="nav-dropdown w-dropdown">
                                     <div class="nav-dropdown-toggle w-dropdown-toggle">
                                         <div class="nav-dropdown-icon w-icon-dropdown-toggle"></div>
+                                        <div class="text-block">Profile</div>
                                     </div>
                                     <nav class="nav-dropdown-list shadow-three mobile-shadow-hide w-dropdown-list"><a
                                             href="#" class="nav-dropdown-link w-dropdown-link">Resource Link 1</a><a
@@ -39,7 +52,7 @@
                                 </div>
                             </li>
                             <li>
-                                <div class="nav-button-wrapper"><a href="#" class="button-primary w-button">Logout</a>
+                                <div class="nav-button-wrapper"><a href="./Login.html" class="button-primary w-button">Logout</a>
                                 </div>
                             </li>
                         </ul>
@@ -50,7 +63,7 @@
                 </div>
             </div>
         </div>
-        <p class="unique-user-id"><strong class="bold-text">Unique ID: 1234567890</strong></p>
+        <p class="unique-user-id"><strong class="bold-text">Unique ID: <span id="uniqueId"></span></strong></p>
     </div>
     <section class="user-s-documents">
         <div class="container">
@@ -144,9 +157,34 @@
             </div>
         </div>
     </section>
-    
+
+    <!-- <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=65f95651c85152dc84412b0d"
+        type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+        crossorigin="anonymous"></script> -->
     <script src="user_script.js"
         type="text/javascript"></script>
 </body>
+<script>
+    // document.getElementById("Logout").addEventListener("click", function() {
+    //     fetch('/logout', {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //         // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+    //       }
+    //     }).then(response =>{
+    //         window.location.href = './Login.html';
+    //       }).then(data=>{
+    //       console.log(data);
+    //     })
+    // })
+
+    const uniqueId = sessionStorage.getItem('uniqueId');
+
+// Display hash value in the HTML element
+if (uniqueId) {
+  document.getElementById('uniqueId').textContent = uniqueId;
+}
+</script>
 
 </html>

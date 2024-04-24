@@ -31,13 +31,13 @@
           <form >
             <!-- Email input -->
             <div class="form-outline mb-4">
-              <input type="email" id="form1Example13" class="form-control form-control-lg" />
+              <input type="email" id="emailInput" class="form-control form-control-lg" />
               <label class="form-label" for="form1Example13">Email address</label>
             </div>
 
             <!-- Password input -->
             <div class="form-outline mb-4">
-              <input type="password" id="form1Example23" class="form-control form-control-lg" />
+              <input type="password" id="passwordInput" class="form-control form-control-lg" />
               <label class="form-label" for="form1Example23">Password</label>
             </div>
 
@@ -56,46 +56,67 @@
   <!-- Bootstrap Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    function authenticatebuyer() {
-      // e.preventDefault()
-      const email = document.getElementById('form1Example13').value
-      const password = document.getElementById('form1Example23').value
-      console.log(email + password)
-      if (email == "" || password == "") {
-        alert('Hacker bhay Hacker')
-        return
-      }
-      else {
-        const secure = {
-          email: email,
-          password: password,
-        }
+  async function authenticatebuyer() {
+  event.preventDefault();
+  const email = document.getElementById('emailInput').value;
+  const password = document.getElementById('passwordInput').value;
+  console.log(email, password)
+  try {
+    const response = await fetch('/confirm_login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password })
+    });
 
-        fetch('/confirm_login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(secure)
-        }).then(response =>{
-          if(response.status===200){
-            window.location.href = './user_index.html';
-          }
-          else{
-            return response.json()
-            console.log(response.json());
-          }
-        }).then(data=>{
-          console.log(data);
-        }).catch(error=>{
-          console.log(error);
-          alert("An unexpected error occured");
-        });
-      }
+    if (!response.ok) {
+      throw new Error('Authentication failed');
     }
 
-    document.getElementById('login').addEventListener("click" , authenticatebuyer)
+    const data = await response.json();
+
+    sessionStorage.setItem('uniqueId', data.uniqueId);
+
+    window.location.href = '/main';
+  } catch (error) {
+    console.error('Error during login:', error);
+    alert('Login failed. Please try again.');
+  }
+}
+
+  document.getElementById('login').addEventListener("click" , authenticatebuyer)
   </script>
+ 
+<!-- <script>
+  document.getElementById('login').addEventListener('click', async function(event) {
+    event.preventDefault();
+    const email = document.getElementById('emailInput').value;
+    const password = document.getElementById('passwordInput').value;
+    
+    try {
+      const response = await fetch('/confirm_login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}` // Include the token in the Authorization header
+        },
+        body: JSON.stringify({ email, password })
+      });
+
+      if (!response.ok) {
+        throw new Error('Authentication failed');
+      }
+
+      const data = await response.json();
+      localStorage.setItem('token', data.token);
+      window.location.href = '/main';
+    } catch (error) {
+      console.error('Error during login:', error);
+      alert('Login failed. Please try again.');
+    }
+  });
+</script> -->
 </body>
 
 </html>

@@ -12,6 +12,10 @@ const newuser=new mongoose.Schema({
     password:{
         type:String,
         required:true
+    },
+    uniqueId:{
+        type:String,
+        required:true
     }
 })
 

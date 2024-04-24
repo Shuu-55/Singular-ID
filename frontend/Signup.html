@@ -78,11 +78,16 @@
         return;
     }
 
+    const uniqueId = generateUniqueId(email, name);
+
+    sessionStorage.setItem('uniqueId', uniqueId);
+
     // Proceed with form submission
     const data = {
         name: name,
         email: email,
         password: password,
+        uniqueId: uniqueId
     };
 
     fetch('/register_user', {
@@ -105,6 +110,20 @@
         console.error('Error:', error);
         alert("Failed to register user. Please try again.");
     });
+}
+
+function generateUniqueId(email, name) {
+    const combinedString = email + name;
+
+    let hash = 0;
+    for (let i = 0; i < combinedString.length; i++) {
+        hash = (hash << 5) - hash + combinedString.charCodeAt(i);
+        hash |= 0; // Convert to 32bit integer
+    }
+
+    // Convert hash to a positive hexadecimal string
+    const uniqueId = (hash >>> 0).toString(16);
+    return uniqueId;
 }
 
 document.getElementById('signup').addEventListener('click', submitform);
