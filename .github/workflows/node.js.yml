@@ -24,12 +24,6 @@ jobs:
           node-version: "18"
       - name: List directory contents
         run: ls -al
-      - name: Go to backend
-        run: cd backend
-      - name: Install dependencies
-        run: npm install
-      - name: Go to root
-        run: cd ..
       - name: Build Docker image
         run: >
           docker build -t docker push vaibhavrawat/singular-id:latest .
