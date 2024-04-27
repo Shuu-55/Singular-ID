@@ -5,3 +5,5 @@ iac/ansible/Ansible_access.pem
 iac/terraform/.terraform
 iac/terraform/.terraform.lock.hcl
 iac/terraform/terraform.tfstate
+iac/terraform/terraform.tfstate.backup
+
