@@ -1,8 +1,7 @@
-Sure, here's an improved version of your README file with appropriate formatting:
 
 ---
 
-# Minor Project: Singular-ID
+                                     # Minor Project: Singular-ID
 
 ## Overview
 
@@ -24,11 +23,11 @@ Singular-ID is a document storage system where users can store and access docume
 
 ### Docker Image
 
-[Docker Image](#) (Link to Docker image)
+[Docker Image](https://hub.docker.com/repository/docker/vaibhavrawat/singular-id/)
 
 ## Infrastructure Provisioning
 
-Before setting up the infrastructure, ensure that you have configured the AWS CLI and installed Terraform on your system. [Install Terraform](#)
+Before setting up the infrastructure, ensure that you have configured the AWS CLI and installed Terraform on your system. [Install Terraform](https://developer.hashicorp.com/terraform/downloads)
 
 ### Steps to Replicate Infrastructure:
 
@@ -58,7 +57,7 @@ Before setting up the infrastructure, ensure that you have configured the AWS CL
 
 ## Configuration Management
 
-Before managing configurations, ensure that you have installed Ansible on your local system. [Install Ansible](#)
+Before managing configurations, ensure that you have installed Ansible on your local system. [Install Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
 
 ### Steps to Manage Configurations:
 
