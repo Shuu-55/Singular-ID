@@ -42,7 +42,7 @@
         enabled: yes
     - name: Copy file from local to remote
       ansible.builtin.copy:
-        src: /home/vaibhav/.ansible/run-container.sh
+        src: /home/vaibhav/.ansible/Singular-ID/iac/ansible/run-container.sh
         dest: /home/ubuntu/run-container.sh
         remote_src: no
     - name: Remove carriage return characters from the script file
