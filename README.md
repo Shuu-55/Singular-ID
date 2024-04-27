@@ -1,7 +1,6 @@
 
 ---
-
-                                     # Minor Project: Singular-ID
+<p align="center"><h1>Minor Project: Singular-ID</h1></p>
 
 ## Overview
 
