@@ -6,42 +6,41 @@ import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import session from 'express-session';
 
-dotenv.config();
-
 const app = express()
 const router = express.Router()
+
+app.use(session({
+    secret: "secret-key",
+    resave: false,
+    saveUninitialized: false
+}));
+
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 
+// const verifyToken = (req, res, next) => {
+//     const authHeader = req.headers.authorization;
+//     if (!authHeader) {
+//         return res.status(401).json({ error: 'No token provided' }); // Update error message
+//     }
+
+//     const token = authHeader.split(' ')[1];
+
+//     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+//         if (err) {
+//             return res.status(403).json({ error: 'Failed to authenticate token' });
+//         }
+
+//         req.user = decoded;
+//         next();
+//     });
+// };
+
+app.use(express.urlencoded({extended:false}))
 app.use(express.json())
-
-app.use(session({
-    secret: 'your-secret-key', // Change this to a secret key for session encryption
-    resave: false,
-    saveUninitialized: true
-}));
-
-const verifyToken = (req, res, next) => {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-        return res.status(401).json({ error: 'No token provided' }); // Update error message
-    }
-
-    const token = authHeader.split(' ')[1];
-
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-        if (err) {
-            return res.status(403).json({ error: 'Failed to authenticate token' });
-        }
-
-        req.user = decoded;
-        next();
-    });
-};
-
-
 
 router.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../../../frontend/index.html'))                    //Main
@@ -55,13 +54,30 @@ router.get('/signup', (req, res) => {                                           
     res.sendFile(path.join(__dirname, '../../../frontend/Signup.html'))                  
 })
 
-router.get('/main',async(req,res)=>{                                                      //main page
-    res.sendFile(path.join(__dirname, '../../../frontend/user_index.html'))
+const isAuthenticated = (req, res, next) => {
+    if (req.session && req.session.email) {
+        next();
+    } else {
+        res.status(401).json('Unauthorized');
+    }
+};
+
+router.get('/main',isAuthenticated,async(req,res)=>{                                                     //main page
+    if(req.session.email){
+        res.sendFile(path.join(__dirname, '../../../frontend/user_index.html'))
+    }
+    else{
+        res.json("Unauthorised")
+    }                                          
+    
 })
 
 router.get('/review', async(req,res)=>{
     res.sendFile(path.join(__dirname, "../../../frontend/Reviewer.html"))
 })
+
+
+
 
 router.post('/register_user', async (req, res) => {                                   //fetch of signup page
     const userData = req.body
@@ -88,7 +104,7 @@ router.post('/register_user', async (req, res) => {                             
     res.status(200).send('Data received and user registered')
 })
 
-router.post('/confirm_login', async (req, res) => {
+router.post('/confirm_login', async (req, res) => {                              //fetch of signin page
     const { email, password } = req.body;
 
     try {
@@ -104,10 +120,9 @@ router.post('/confirm_login', async (req, res) => {
 
         const uniqueId = user.uniqueId; 
 
-        // req.session.email = user.email;
-        // req.session.name = user.name;
-        // req.session.uniqueId = uniqueId;
-
+        req.session.email = user.email;
+        req.session.name = user.name;
+        req.session.uniqueId = uniqueId;
         
         return res.status(200).json({ uniqueId });
 
@@ -117,16 +132,18 @@ router.post('/confirm_login', async (req, res) => {
     }
 });
 
-// router.post("/logout", verifyToken, async(req,res)=>{
-//     // Get the user's email from the decoded JWT token
-//     const userEmail = req.user.email;
+router.post('/logout', (req, res) => {
+    // Destroy the session
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Error destroying session:', err);
+            return res.status(500).send('Internal Server Error');
+        }
+        // Session destroyed successfully
+        res.sendStatus(200);
+    });
+});
 
-//     // Remove the token from the server-side storage (e.g., a database)
-//     await register.updateOne({ email: userEmail }, { $unset: { token: 1 } });
-
-//     // Respond with a success message
-//     res.status(200).json("Logged Out");
-// })
 
 // Function to generate a new unique ID (hash) incorporating user email
 function generateNewUniqueId(email) {
@@ -155,9 +172,10 @@ router.post('/change_unique_id', async (req, res) => {
             console.error('User not found');
             return res.status(404).json({ error: 'User not found' });
         }
+        updateUniqueId(req.session.uniqueId, newUniqueId)
 
         req.session.uniqueId = newUniqueId;
-
+        
         return res.status(200).json({ message: 'Unique ID changed successfully', newUniqueId });
 
     } catch (error) {
@@ -168,8 +186,7 @@ router.post('/change_unique_id', async (req, res) => {
 
 async function updateUniqueId(userId, newUniqueId) {
     try {
-        // Assuming you have a model named 'User' and 'userId' is the user's database ID
-        const user = await register.findById(userId);
+        const user = await register.findOne(userId);
         if (!user) {
             console.error('User not found');
             return false;

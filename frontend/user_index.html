@@ -52,7 +52,7 @@
                                 </div>
                             </li>
                             <li>
-                                <div class="nav-button-wrapper"><a href="./Login.html" class="button-primary w-button">Logout</a>
+                                <div class="nav-button-wrapper" ><button id="logoutButton">Logout</button>
                                 </div>
                             </li>
                         </ul>
@@ -203,19 +203,23 @@
         type="text/javascript"></script>
 </body>
 <script>
-    // document.getElementById("Logout").addEventListener("click", function() {
-    //     fetch('/logout', {
-    //       method: 'POST',
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //         // 'Authorization': `Bearer ${localStorage.getItem('token')}`
-    //       }
-    //     }).then(response =>{
-    //         window.location.href = './Login.html';
-    //       }).then(data=>{
-    //       console.log(data);
-    //     })
-    // })
+    document.getElementById("logoutButton").addEventListener("click", function() {
+        fetch('/logout', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(response => {
+            if (response.ok) {
+                // Redirect to the login page after successful logout
+                window.location.href = './Login.html';
+            } else {
+                console.error('Failed to logout');
+            }
+        }).catch(error => {
+            console.error('Error during logout:', error);
+        });
+    });
 
     const uniqueId = sessionStorage.getItem('uniqueId');
 
