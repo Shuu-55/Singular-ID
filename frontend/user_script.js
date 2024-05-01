@@ -10,5 +10,5 @@
     closePopupButton.addEventListener('click', () => {
         popup.classList.add('hidden'); // Hides the pop-up
     });
-
+    
 })();
